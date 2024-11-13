@@ -1,0 +1,82 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(GreetingCardApp());
+}
+
+class GreetingCardApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Greeting Card App',
+      theme: ThemeData(primarySwatch: Colors.purple),
+      home: GreetingScreen(),
+    );
+  }
+}
+
+class GreetingScreen extends StatefulWidget {
+  @override
+  _GreetingScreenState createState() => _GreetingScreenState();
+}
+
+class _GreetingScreenState extends State<GreetingScreen> {
+  final TextEditingController _nameController = TextEditingController();
+  String _greetingMessage = ''; // Stores the personalized greeting message
+
+  // Method to display the greeting or an alert if the input is empty
+  void _showGreeting() {
+    setState(() {
+      if (_nameController.text.isEmpty) {
+        // Alert if name is not entered
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Input Required'),
+            content: Text('Please enter your name.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      } else {
+        // Update greeting message with the entered name
+        _greetingMessage = 'Hello, ${_nameController.text}!';
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Greeting Card App')),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(
+                labelText: 'Enter your name',
+              ),
+            ),
+            SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _showGreeting,
+              child: Text('Show Greeting'),
+            ),
+            SizedBox(height: 24),
+            Text(
+              _greetingMessage,
+              style: TextStyle(fontSize: 24),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
